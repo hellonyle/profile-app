@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import TestimonialCard from '@/components/TestimonialCard';
 import Image from 'next/image';
 import { 
   ChevronLeft, 
@@ -133,22 +132,20 @@ export const ProfileApp: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<number>(0);
   const [isStarted, setIsStarted] = useState<boolean>(false);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-  const [isExiting, setIsExiting] = useState<boolean>(false);
-  const [revealedTestimonials, setRevealedTestimonials] = useState<boolean[]>([false, false, false, false]);
   
   const progress = ((currentSection + 1) / sections.length) * 100;
 
-  const nextSection = () => {
+  const nextSection = useCallback(() => {
     if (currentSection < sections.length - 1) {
       setCurrentSection(curr => curr + 1);
     }
-  };
+  }, [currentSection, sections.length]);
 
-  const prevSection = () => {
+  const prevSection = useCallback(() => {
     if (currentSection > 0) {
       setCurrentSection(curr => curr - 1);
     }
-  };
+  }, [currentSection]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -175,7 +172,7 @@ export const ProfileApp: React.FC = () => {
               onClick={() => setIsStarted(true)}
               className={`bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 
                 text-white px-8 py-4 rounded-lg text-lg transition-all duration-500 transform hover:scale-105
-                ${isExiting ? 'opacity-0 translate-y-4' : 'opacity-100'}`}
+                opacity-100`}
             >
               Start Journey
             </Button>

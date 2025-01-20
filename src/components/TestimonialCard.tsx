@@ -30,7 +30,7 @@ const TestimonialCard: FC<TestimonialCardProps> = ({ testimonial, isRevealed, on
               <span className="text-2xl text-blue-500">?</span>
             </div>
             <p className="text-lg font-semibold text-blue-500">Click to reveal</p>
-            <p className="text-sm text-gray-400">Discover who's behind this testimonial</p>
+            <p className="text-sm text-gray-400">Discover who is behind this testimonial</p>
           </div>
         </div>
       ) : (
