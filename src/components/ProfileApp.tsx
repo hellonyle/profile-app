@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import TestimonialCardComponent from '@/components/TestimonialCard';
-
+import TestimonialCard from '@/components/TestimonialCard';
+import Image from 'next/image';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -15,7 +15,6 @@ import {
   Star, 
   MessageCircle 
 } from "lucide-react";
-import TestimonialCard from '@/components/TestimonialCard';
 
 type Trait = {
   label: string;
@@ -42,60 +41,12 @@ type Section = {
   testimonials?: Testimonial[];
 };
 
-type TestimonialCardProps = {
-  testimonial: {
-    text: string;
-    author: string;
-    role: string;
-    image?: string;
-  };
-  isRevealed: boolean;
-  onReveal: () => void;
-};
-
-const TestimonialCardLocal: React.FC<TestimonialCardProps> = ({ testimonial, isRevealed, onReveal }) => {
-  return (
-    <div 
-      onClick={!isRevealed ? onReveal : undefined}
-      className={`
-        relative rounded-xl shadow-lg 
-        transition-all duration-700 ease-in-out
-        ${!isRevealed ? 'cursor-pointer hover:scale-105 bg-gray-900' : 'bg-white'}
-        min-h-[200px]
-      `}
-    >
-      {!isRevealed ? (
-        <div className="flex items-center justify-center h-full p-6">
-          <div className="text-center">
-            <div className="w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center mb-4 mx-auto">
-              <span className="text-2xl text-blue-500">?</span>
-            </div>
-            <p className="text-lg font-semibold text-blue-500">Click to reveal</p>
-            <p className="text-sm text-gray-400">Discover who's behind this testimonial</p>
-          </div>
-        </div>
-      ) : (
-        <div className="p-6 h-full flex flex-col justify-between">
-          <p className="text-gray-700 text-lg font-medium mb-4 italic leading-relaxed">
-            "{testimonial.text}"
-          </p>
-          <div className="mt-auto">
-            <p className="font-bold text-xl text-gray-900">{testimonial.author}</p>
-            <p className="text-sm text-gray-600 mt-1">{testimonial.role}</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-
 const sections: Section[] = [
   {
     id: 'welcome',
     title: "Welcome",
-    subtitle: "Let's explore my profile together",
-    content: "Hi, I'm Lennart! I'm excited to show you how I could contribute to Campus Founders as a Program Manager. I bring a unique blend of innovation, coaching experience, and entrepreneurial spirit.",
+    subtitle: "Lets explore my profile together",
+    content: "Hi, I am Lennart and excited to show you how I could contribute to Campus Founders as a Program Manager. I bring a unique blend of innovation, coaching experience, and entrepreneurial spirit.",
     image: "/images/welcome.jpg",
     background: "/images/bg-welcome.jpg",
     icon: Heart
@@ -176,42 +127,16 @@ const sections: Section[] = [
     background: "/images/bg-experience.jpg",
     icon: Briefcase
   }
-    ];
+];
 
-    export const ProfileApp: React.FC = () => {
-      const [currentSection, setCurrentSection] = useState<number>(0);
-      const [isStarted, setIsStarted] = useState<boolean>(false);
-      const [currentTestimonial, setCurrentTestimonial] = useState<number>(0);
-      const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-      const [isExiting, setIsExiting] = useState<boolean>(false);
-      
-      const [revealedTestimonials, setRevealedTestimonials] = useState<boolean[]>([false, false, false, false]);
+export const ProfileApp: React.FC = () => {
+  const [currentSection, setCurrentSection] = useState<number>(0);
+  const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+  const [isExiting, setIsExiting] = useState<boolean>(false);
+  const [revealedTestimonials, setRevealedTestimonials] = useState<boolean[]>([false, false, false, false]);
+  
   const progress = ((currentSection + 1) / sections.length) * 100;
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') nextSection();
-      if (e.key === 'ArrowLeft') prevSection();
-    };
-    
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
-
-  useEffect(() => {
-    if (currentSection >= 0 && currentSection < sections.length) {
-      if (sections[currentSection].id === 'testimonials') {
-        const timer = setInterval(() => {
-          setCurrentTestimonial(prev => 
-            prev === sections[currentSection].testimonials!.length - 1 ? 0 : prev + 1
-          );
-        }, 5000);
-        return () => clearInterval(timer);
-      }
-    }
-    // Reset imageLoaded state when section changes
-    setImageLoaded(false);
-  }, [currentSection]);
 
   const nextSection = () => {
     if (currentSection < sections.length - 1) {
@@ -225,10 +150,19 @@ const sections: Section[] = [
     }
   };
 
-  const handleExit = () => {
-    setIsExiting(true);
-    setTimeout(() => setIsStarted(false), 500);
-  };
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') nextSection();
+      if (e.key === 'ArrowLeft') prevSection();
+    };
+    
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [nextSection, prevSection]);
+
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [currentSection]);
 
   if (!isStarted) {
     return (
@@ -236,7 +170,7 @@ const sections: Section[] = [
         <Card className="w-full max-w-2xl bg-white/80 backdrop-blur-sm transition-all duration-500">
           <CardContent className="p-6 text-center">
             <h1 className="text-4xl font-bold text-gray-800 mb-6">Welcome to My Profile</h1>
-            <p className="text-lg text-gray-600 mb-8">Let's explore how I could contribute to Campus Founders</p>
+            <p className="text-lg text-gray-600 mb-8">Let&apos;s explore how I could contribute to Campus Founders</p>
             <Button 
               onClick={() => setIsStarted(true)}
               className={`bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 
@@ -322,51 +256,23 @@ const sections: Section[] = [
                   ))}
                 </div>
               )}
-
-{currentContent.testimonials && (
-  <div className="w-full">
-    <div className="flex items-center gap-3 mb-6">
-      <Icon className="h-8 w-8 text-blue-600" />
-      <h2 className="text-3xl font-bold text-gray-800">
-        {currentContent.title}
-      </h2>
-    </div>
-    <h3 className="text-xl text-blue-600 font-semibold mb-6">
-      {currentContent.subtitle}
-    </h3>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {currentContent.testimonials.map((testimonial, index) => (
-        <TestimonialCard
-          key={index}
-          testimonial={testimonial}
-          isRevealed={revealedTestimonials[index]}
-          onReveal={() => {
-            const newRevealed = [...revealedTestimonials];
-            newRevealed[index] = true;
-            setRevealedTestimonials(newRevealed);
-          }}
-        />
-      ))}
-    </div>
-  </div>
-)}
-
             </div>
-            {!currentContent.testimonials && (
-  <div className="order-1 md:order-2 relative">
-    {!imageLoaded && (
-      <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-lg" />
-    )}
-    <img
-      src={currentContent.image}
-      alt={currentContent.title}
-      className={`w-full rounded-lg shadow-lg transition-all duration-500 transform hover:scale-105 ${
-        imageLoaded ? 'opacity-100' : 'opacity-0'
-      }`}
-      onLoad={() => setImageLoaded(true)}
-            />
-          </div>
-)}
+
+            <div className="order-1 md:order-2 relative">
+              {!imageLoaded && (
+                <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-lg" />
+              )}
+              <Image
+                src={currentContent.image}
+                alt={currentContent.title}
+                width={800}
+                height={600}
+                className={`w-full rounded-lg shadow-lg transition-all duration-500 transform hover:scale-105 ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => setImageLoaded(true)}
+              />
+            </div>
           </div>
 
           <div className="flex justify-between mt-8">
@@ -406,18 +312,18 @@ const sections: Section[] = [
               <span>Next: {sections[currentSection + 1].title}</span>
             </div>
           )}
-        {currentSection === sections.length - 1 && (
-          <div className="mt-8 flex justify-center">
-            <Button
-              onClick={() => window.location.href = '/testimonials'}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
-            >
-              View Testimonials
-              <MessageCircle className="h-5 w-5" />
-            </Button>
-          </div>
-        )}
 
+          {currentSection === sections.length - 1 && (
+            <div className="mt-8 flex justify-center">
+              <Button
+                onClick={() => window.location.href = '/testimonials'}
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+              >
+                View Testimonials
+                <MessageCircle className="h-5 w-5" />
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

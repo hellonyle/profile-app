@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { MessageCircle, ArrowLeft } from "lucide-react";
+import Image from 'next/image';
 
 type Testimonial = {
   text: string;
@@ -15,7 +16,7 @@ const testimonials: Testimonial[] = [
   {
     text: "Working with Lennart has always been a pleasure. His ability to combine knowledge from different areas, especially in automation and AI, consistently inspires. His energy and resourcefulness make every collaboration both productive and highly enjoyable.",
     author: "Pia Linden",
-    role: "Startup Coach & Facilitator at Deloitte",
+    role: "Design Thinking Coach & Facilitator at Deloitte",
     image: "/images/testimonial1.jpg"
   },
   {
@@ -33,7 +34,7 @@ const testimonials: Testimonial[] = [
   {
     text: "Working with Lennart is a delight. His boundless creativity is matched only by his enthusiasm for topics that interest him. He consistently brings unique value to every team, always has relevant methods at hand, and can be relied upon 100% to deliver excellence.",
     author: "Charlotte Streit",
-    role: "CEO Hotel Ora et Amore",
+    role: "CEO Hotel Ora & Amore",
     image: "/images/testimonial4.jpg"
   }
 ];
@@ -44,7 +45,6 @@ const TestimonialsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <Button 
             onClick={() => window.location.href = '/'}
@@ -55,7 +55,6 @@ const TestimonialsPage = () => {
           </Button>
         </div>
 
-        {/* Title Section */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
             <MessageCircle className="h-8 w-8 text-blue-600" />
@@ -64,7 +63,6 @@ const TestimonialsPage = () => {
           <p className="text-xl text-gray-600">What others say about me</p>
         </div>
 
-        {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((testimonial, index) => (
             <div
@@ -88,24 +86,27 @@ const TestimonialsPage = () => {
                       <span className="text-3xl text-blue-500">?</span>
                     </div>
                     <p className="text-xl font-semibold text-blue-500">Click to reveal</p>
-                    <p className="text-sm text-gray-400 mt-2">Discover who's behind this testimonial</p>
+                    <p className="text-sm text-gray-400 mt-2">Discover who&apos;s behind this testimonial</p>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col h-full">
                   <div className="flex items-center gap-4 mb-6">
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.author}
-                      className="w-16 h-16 rounded-full object-cover"
-                    />
+                    <div className="relative w-16 h-16">
+                      <Image 
+                        src={testimonial.image}
+                        alt={testimonial.author}
+                        fill
+                        className="rounded-full object-cover"
+                      />
+                    </div>
                     <div>
                       <h3 className="font-bold text-xl text-gray-900">{testimonial.author}</h3>
                       <p className="text-gray-600">{testimonial.role}</p>
                     </div>
                   </div>
                   <p className="text-gray-700 text-lg italic leading-relaxed flex-grow">
-                    "{testimonial.text}"
+                    &quot;{testimonial.text}&quot;
                   </p>
                 </div>
               )}
