@@ -115,7 +115,7 @@ const sections: Section[] = [
     id: 'experience',
     title: "Key Experiences",
     subtitle: "My professional journey",
-    content: "My experience has prepared me well for the Program Coordinator role:",
+    content: "My experience has prepared me well for the Program Manager role:",
     bullets: [
       "Head of Product & Innovation at vonMorgen",
       "Startup Coach & Trainer",
